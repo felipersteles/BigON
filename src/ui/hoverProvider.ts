@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { FunctionComplexityReport } from '../analyzer/types';
+import { getMessages } from '../i18n';
 
 export class AsymptoticHoverProvider implements vscode.HoverProvider {
   constructor(private getReports: (doc: vscode.TextDocument) => FunctionComplexityReport[]) { }
@@ -26,12 +27,13 @@ export class AsymptoticHoverProvider implements vscode.HoverProvider {
     if (!fnReport) return null;
 
     const md = new vscode.MarkdownString();
+    const messages = getMessages(vscode.env.language);
     md.isTrusted = true;
-    md.appendMarkdown(`### Complexidade de **${fnReport.functionName}**\n\n`);
-    md.appendMarkdown(`- **Tempo**: \`${fnReport.timeComplexity}\`\n`);
-    md.appendMarkdown(`- **Espaço**: \`${fnReport.spaceComplexity}\`\n\n`);
+    md.appendMarkdown(`### ${messages.complexity} **${fnReport.functionName}**\n\n`);
+    md.appendMarkdown(`- **${messages.time}**: \`${fnReport.timeComplexity}\`\n`);
+    md.appendMarkdown(`- **${messages.space}**: \`${fnReport.spaceComplexity}\`\n\n`);
 
-    md.appendMarkdown(`--- \n**Motivos / Justificativa:**\n`);
+    md.appendMarkdown(`--- \n**${messages.reasons}:**\n`);
     for (const step of fnReport.reasoningSteps) {
       md.appendMarkdown(`- ${step.title}: *${step.detail}*\n`);
     }

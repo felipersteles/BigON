@@ -6,13 +6,15 @@ import { ExplanationWebviewPanel } from './ui/webviewPanel';
 import { ComplexityEngine } from './analyzer/complexityEngine';
 import { normalizeLanguageId } from './analyzer/universal/universalParserRouter';
 import { FunctionComplexityReport } from './analyzer/types';
+import { getMessages } from './i18n';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extensão "BigON - Analisador de Complexidade Multi-Linguagem" ativada!');
 
   const engine = new ComplexityEngine();
+  const messages = getMessages(vscode.env.language);
   const reportsCache = new Map<string, FunctionComplexityReport[]>();
-  const codeLensProvider = new AsymptoticCodeLensProvider(reportsCache);
+  const codeLensProvider = new AsymptoticCodeLensProvider(engine, reportsCache);
   const decorationManager = new LineDecorationManager();
 
   let debounceTimer: NodeJS.Timeout | undefined;
@@ -92,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (editor) {
       updateCurrentEditorAnalysis(editor);
       codeLensProvider.refresh();
-      vscode.window.showInformationMessage('BigON: Análise do arquivo concluída com sucesso!');
+    vscode.window.showInformationMessage(messages.analysisCompleted);
     }
   });
 
@@ -102,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
       updateCurrentEditorAnalysis(vscode.window.activeTextEditor);
     }
     vscode.window.showInformationMessage(
-      `BigON: Anotações In-line ${enabled ? 'Ativadas' : 'Desativadas'}`
+      enabled ? messages.decorationsOn : messages.decorationsOff
     );
   });
 
@@ -122,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (reportToOpen) {
         ExplanationWebviewPanel.show(context.extensionUri, reportToOpen);
       } else {
-        vscode.window.showWarningMessage('Nenhuma função identificada para exibir a explicação.');
+        vscode.window.showWarningMessage(messages.noFunction);
       }
     }
   );
@@ -139,5 +141,3 @@ export function activate(context: vscode.ExtensionContext) {
     decorationManager
   );
 }
-
-export function deactivate() { }

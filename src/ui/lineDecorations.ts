@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { FunctionComplexityReport } from '../analyzer/types';
+import { getMessages } from '../i18n';
 
 export class LineDecorationManager {
   private decorationType: vscode.TextEditorDecorationType;
@@ -49,6 +50,7 @@ export class LineDecorationManager {
     }
 
     const decorations: vscode.DecorationOptions[] = [];
+    const messages = getMessages(vscode.env.language);
 
     for (const fnReport of functionReports) {
       for (const ann of fnReport.annotations) {
@@ -64,8 +66,8 @@ export class LineDecorationManager {
             range: lineRange,
 
             hoverMessage: new vscode.MarkdownString(
-              `**Complexidade assintótica**: ${ann.explanation}\n\n` +
-              `**Custo**: \`${ann.cost}\``
+              `**${messages.asymptoticComplexity}**: ${ann.explanation}\n\n` +
+              `**${messages.cost}**: \`${ann.cost}\``
             ),
 
             renderOptions: {

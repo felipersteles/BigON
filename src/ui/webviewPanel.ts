@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import { FunctionComplexityReport } from '../analyzer/types';
+import { getMessages } from '../i18n';
+import { Messages } from '../i18n/messages';
 
 const COMPLEXITY_SCALE = [
   'O(1)',
@@ -27,9 +29,11 @@ export class ExplanationWebviewPanel {
   public static currentPanel: ExplanationWebviewPanel | undefined;
   private readonly _panel: vscode.WebviewPanel;
   private _disposables: vscode.Disposable[] = [];
+  private readonly messages: Messages;
 
   private constructor(panel: vscode.WebviewPanel, report: FunctionComplexityReport) {
     this._panel = panel;
+    this.messages = getMessages(vscode.env.language);
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     this.update(report);
   }
@@ -104,17 +108,17 @@ export class ExplanationWebviewPanel {
   private getEfficiencyBadge(complexity: string): { text: string; colorClass: string } {
     const norm = this.normalizeComplexity(complexity);
     if (norm === 'O(1)' || norm === 'O(log n)' || norm === 'O(sqrt n)') {
-      return { text: 'Excelente', colorClass: 'badge-excelente' };
+      return { text: this.messages.excellent, colorClass: 'badge-excelente' };
     } else if (norm === 'O(n)') {
-      return { text: 'Boa', colorClass: 'badge-boa' };
+      return { text: this.messages.good, colorClass: 'badge-boa' };
     } else if (norm === 'O(n log n)') {
-      return { text: 'Aceitável', colorClass: 'badge-aceitavel' };
+      return { text: this.messages.acceptable, colorClass: 'badge-aceitavel' };
     } else if (norm === 'O(n²)' || norm === 'O(n³)' || norm === 'O(n⁴)') {
-      return { text: 'Ruim', colorClass: 'badge-ruim' };
+      return { text: this.messages.poor, colorClass: 'badge-ruim' };
     } else if (norm === 'O(2^n)' || norm === 'O(n!)') {
-      return { text: 'Péssima', colorClass: 'badge-pessima' };
+      return { text: this.messages.terrible, colorClass: 'badge-pessima' };
     }
-    return { text: 'Variável', colorClass: 'badge-info' };
+    return { text: this.messages.variable, colorClass: 'badge-info' };
   }
 
   private generateSvgChart(timeComp: string, spaceComp: string): string {
@@ -221,11 +225,11 @@ export class ExplanationWebviewPanel {
 
         let badgeTag = '';
         if (isTimeActive && isSpaceActive) {
-          badgeTag = `<span class="tag tag-both">Tempo & Espaço</span>`;
+          badgeTag = `<span class="tag tag-both">${this.messages.time} & ${this.messages.space}</span>`;
         } else if (isTimeActive) {
-          badgeTag = `<span class="tag tag-time">Tempo</span>`;
+          badgeTag = `<span class="tag tag-time">${this.messages.time}</span>`;
         } else if (isSpaceActive) {
-          badgeTag = `<span class="tag tag-space">Espaço</span>`;
+          badgeTag = `<span class="tag tag-space">${this.messages.space}</span>`;
         }
 
         return `
@@ -332,7 +336,7 @@ export class ExplanationWebviewPanel {
     const svgChartHtml = this.generateSvgChart(report.timeComplexity, report.spaceComplexity);
 
     return `<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="${vscode.env.language.toLowerCase().startsWith('pt') ? 'pt-BR' : 'en'}">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${cspSource} https://unpkg.com; script-src 'nonce-${nonce}' https://unpkg.com 'unsafe-inline'; connect-src https://unpkg.com; font-src https://unpkg.com;">
@@ -755,13 +759,13 @@ export class ExplanationWebviewPanel {
   <header>
     <h1>
       <ion-icon name="code-slash-outline" class="header-icon"></ion-icon>
-      Função <span class="fn">${this.escapeHtml(report.functionName)}</span>
+      ${this.messages.functionLabel} <span class="fn">${this.escapeHtml(report.functionName)}</span>
     </h1>
     <div class="complexities">
       <div class="metric-card">
         <ion-icon name="time-outline" class="metric-icon"></ion-icon>
         <div class="metric-info">
-          <span class="label">Tempo</span>
+          <span class="label">${this.messages.time}</span>
           <span class="value">${this.escapeHtml(report.timeComplexity)}</span>
         </div>
         <span class="badge ${timeBadge.colorClass}">${timeBadge.text}</span>
@@ -769,7 +773,7 @@ export class ExplanationWebviewPanel {
       <div class="metric-card">
         <ion-icon name="hardware-chip-outline" class="metric-icon"></ion-icon>
         <div class="metric-info">
-          <span class="label">Espaço</span>
+          <span class="label">${this.messages.space}</span>
           <span class="value">${this.escapeHtml(report.spaceComplexity)}</span>
         </div>
         <span class="badge ${spaceBadge.colorClass}">${spaceBadge.text}</span>
@@ -780,20 +784,20 @@ export class ExplanationWebviewPanel {
   <!-- BARRA DE ABAS NA WEBVIEW -->
   <nav class="tab-bar">
     <button class="tab-btn active" data-tab="tab-analysis">
-      <ion-icon name="analytics-outline"></ion-icon> Análise da Função
+      <ion-icon name="analytics-outline"></ion-icon> ${this.messages.functionAnalysis}
     </button>
     <button class="tab-btn" data-tab="tab-chart">
-      <ion-icon name="bar-chart-outline"></ion-icon> Gráfico Assintótico
+      <ion-icon name="bar-chart-outline"></ion-icon> ${this.messages.growthChart}
     </button>
     <button class="tab-btn" data-tab="tab-theory">
-      <ion-icon name="book-outline"></ion-icon> Teoria & Notação (Cormen)
+      <ion-icon name="book-outline"></ion-icon> ${this.messages.theory}
     </button>
   </nav>
 
   <!-- ABA 1: ANÁLISE DA FUNÇÃO -->
   <div id="tab-analysis" class="tab-content active">
     <section>
-      <h2><ion-icon name="git-network-outline" class="section-icon"></ion-icon> Passos de Raciocínio (AST)</h2>
+      <h2><ion-icon name="git-network-outline" class="section-icon"></ion-icon> ${this.messages.reasoningSteps}</h2>
       <ol class="steps">
         ${stepsHtml}
       </ol>
@@ -802,10 +806,10 @@ export class ExplanationWebviewPanel {
     ${report.annotations.length > 0
         ? `
     <section>
-      <h2><ion-icon name="list-outline" class="section-icon"></ion-icon> Anotações de Linha</h2>
+      <h2><ion-icon name="list-outline" class="section-icon"></ion-icon> ${this.messages.lineAnnotations}</h2>
       <table>
         <thead>
-          <tr><th>Local</th><th>Custo</th><th>Explicação Sintática</th></tr>
+          <tr><th>${this.messages.location}</th><th>${this.messages.cost}</th><th>${this.messages.explanation}</th></tr>
         </thead>
         <tbody>
           ${annotationsHtml}
