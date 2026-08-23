@@ -10,8 +10,11 @@ Aqui você encontrará materiais detalhados para entender como a extensão funci
 
 | Documento | Descrição |
 | :--- | :--- |
-| 🛠️ **[Guia de Contribuição (`CONTRIBUTING.md`)](file:///d:/Documents/Projetos/Typescript/BigON/docs/CONTRIBUTING.md)** | Instruções de setup, execução local, testes, padrões de código e **passo a passo para adicionar suporte a novas linguagens** ou **regras de análise assintótica**. |
-| 🏗️ **[Arquitetura do Sistema (`ARCHITECTURE.md`)](file:///d:/Documents/Projetos/Typescript/BigON/docs/ARCHITECTURE.md)** | Visão profunda sobre o motor de análise AST (`ComplexityEngine`), parsers sintáticos universais, pipeline de cálculo Big-O e integração com a interface do VS Code (CodeLens, Hover, LineDecorations, Webview). |
+| 🛠️ **[Guia de Contribuição (`CONTRIBUTING.md`)](./CONTRIBUTING.md)** | Instruções de setup, execução local, testes, padrões de código e passo a passo para adicionar suporte a linguagens ou regras. |
+| 🏗️ **[Arquitetura do Sistema (`ARCHITECTURE.md`)](./ARCHITECTURE.md)** | Motor de análise AST, parsers universais, pipeline Big-O e integração com CodeLens, Hover, decorações e Webview. |
+| 🚀 **[Começar a usar](./getting-started.md)** | Preparação, compilação, testes e execução no VS Code. |
+| 🧭 **[Usar a extensão](./how-to/use-the-extension.md)** | Comandos, explicações, anotações e configurações. |
+| 📖 **[Referência](./reference.md)** | Scripts npm, comandos e configurações declaradas. |
 
 ---
 

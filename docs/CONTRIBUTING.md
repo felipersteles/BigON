@@ -68,7 +68,7 @@ BigON/
 │   │   └── universal/       # Parsers sintáticos universais para linguagens sem AST nativa no TS
 │   │       ├── types.ts     # Tipos para a AST universal (UniversalFunctionNode, etc.)
 │   │       ├── universalParserRouter.ts # Roteador de linguagem
-│   │       └── parsers/     # Parsers sintáticos específicos (Python, Ruby, C++)
+│   │       └── parsers/     # Parsers sintáticos específicos (Python, Ruby, C/C++)
 │   └── ui/                  # Componentes de Interface de Usuário no VS Code
 │       ├── codeLensProvider.ts # Exibição de cabeçalhos sobre funções no editor
 │       ├── hoverProvider.ts    # Tooltip com resumo ao passar o mouse sobre a função
@@ -76,7 +76,7 @@ BigON/
 │       └── webviewPanel.ts     # Painel educacional interativo com gráficos Big-O
 └── test/                    # Suíte de testes unitários com Jest
     ├── analyzer.test.ts      # Testes do motor AST (JavaScript/TypeScript)
-    ├── multiLanguage.test.ts # Testes para parsers universais (Python, Ruby, C++)
+    ├── multiLanguage.test.ts # Testes para parsers universais (Python, Ruby, C/C++)
     └── scriptLevel.test.ts    # Testes para scripts fora de escopos de função
 ```
 
@@ -99,14 +99,14 @@ npx jest --watch
 1. Abra a pasta do projeto no VS Code.
 2. Pressione `F5` (ou clique na aba **Run and Debug** e selecione **Launch Extension**).
 3. Uma nova janela do VS Code chamada **[Extension Development Host]** se abrirá.
-4. Na janela de desenvolvimento, abra ou crie qualquer arquivo `.js`, `.ts`, `.py`, `.rb` ou `.cpp`.
+4. Na janela de desenvolvimento, abra ou crie qualquer arquivo `.js`, `.ts`, `.py`, `.rb`, `.cpp` ou `.c`.
 5. Observe o **CodeLens** sobre as funções, as **decorações in-line** de custo nas linhas e clique em `[Ver Explicação]` para abrir o Webview interativo.
 
 ---
 
 ## Como Adicionar Suporte a uma Nova Linguagem
 
-O BigON suporta tanto análise via AST nativa (para JS/TS usando a TypeScript Compiler API) quanto parsers sintáticos heurísticos universais para linguagens adicionais (ex: Python, Ruby, C++).
+O BigON suporta análise via AST nativa para JS/TS usando a TypeScript Compiler API e parsers sintáticos heurísticos para Python, Ruby e C/C++. Arquivos C são encaminhados ao parser C++ universal.
 
 Para adicionar suporte a uma nova linguagem (por exemplo, **Go** ou **Java**):
 
@@ -128,7 +128,7 @@ export class GoUniversalParser {
 ```
 
 ### Passo 2: Registrar no Roteador `universalParserRouter.ts`
-Em [src/analyzer/universal/universalParserRouter.ts](file:///d:/Documents/Projetos/Typescript/BigON/src/analyzer/universal/universalParserRouter.ts):
+Em [`src/analyzer/universal/universalParserRouter.ts`](../src/analyzer/universal/universalParserRouter.ts):
 1. Importe seu parser.
 2. Atualize a função `normalizeLanguageId`:
    ```typescript
@@ -148,7 +148,7 @@ Em [src/analyzer/universal/universalParserRouter.ts](file:///d:/Documents/Projet
      "onLanguage:go"
    ]
    ```
-2. Em [src/extension.ts](file:///d:/Documents/Projetos/Typescript/BigON/src/extension.ts), inclua o id da linguagem na função `isSupportedDocument`:
+2. Em [`src/extension.ts`](../src/extension.ts), inclua o id da linguagem na função `isSupportedDocument`:
    ```typescript
    return ['javascript', 'typescript', 'python', 'ruby', 'cpp', 'go'].includes(norm);
    ```
