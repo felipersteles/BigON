@@ -111,4 +111,14 @@ end
 
     expect(result.functions[0].isRecursive).toBe(false);
   });
+
+  test('retorna complexidade desconhecida para limite de laço não inferível', () => {
+    const result = analyze(`
+      function process(n) {
+        for (let i = 0; i < getLimit(n); i++) {}
+      }
+    `);
+
+    expect(result.functions[0].timeComplexity).toBe('O(desconhecido)');
+  });
 });
