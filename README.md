@@ -1,5 +1,13 @@
 # BigON - Analisador de Complexidade Assintótica para VS Code
 
+<!-- wikikit:front-door:start -->
+
+O BigON analisa a complexidade assintótica de código-fonte em tempo real, sem executar o programa.
+
+Para preparar o projeto, consulte o [guia para começar](./docs/getting-started.md). Para usar os recursos no editor, consulte [Usar a extensão](./docs/how-to/use-the-extension.md).
+
+<!-- wikikit:front-door:end -->
+
 <div align="center">
   <img src="./assets/cover.jpg" alt="BigON Capa">
 </div>
