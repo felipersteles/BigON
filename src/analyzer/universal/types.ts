@@ -1,7 +1,7 @@
 /**
  * Tipos e Interfaces para a AST Universal (Multi-Linguagem)
  */
-export type UniversalNodeType = 'function' | 'loop' | 'if' | 'call' | 'statement';
+export type UniversalNodeType = 'function' | 'loop' | 'call';
 
 export interface UniversalLoopNode {
   type: 'loop';
@@ -24,7 +24,6 @@ export interface UniversalFunctionNode {
   name: string;
   startLine: number;
   endLine: number;
-  parameters: string[];
   bodyText: string;
   loops: UniversalLoopNode[];
   recursiveCalls: UniversalCallNode[];
@@ -32,6 +31,5 @@ export interface UniversalFunctionNode {
 }
 
 export interface UniversalFileAST {
-  languageId: string;
   functions: UniversalFunctionNode[];
 }

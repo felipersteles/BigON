@@ -1,5 +1,4 @@
 import * as ts from 'typescript';
-import { ASTParser } from './astParser';
 import { LoopAnalyzer, LoopComplexityInfo, multiplyBigO, maxBigO } from './loopAnalyzer';
 import { RecursionAnalyzer } from './recursionAnalyzer';
 import { SpaceAnalyzer } from './spaceAnalyzer';
@@ -23,7 +22,7 @@ export class ComplexityEngine {
       return this.analyzeUniversalCode(code, filePath, normLang);
     }
 
-    const sourceFile = ASTParser.parseSource(code, filePath);
+    const sourceFile = ts.createSourceFile(filePath, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
     const functions: FunctionComplexityReport[] = [];
 
     const loopAnalyzer = new LoopAnalyzer(sourceFile);
@@ -384,6 +383,13 @@ export class ComplexityEngine {
         ts.isForInStatement(child)
       ) {
         results.push(loopAnalyzer.analyzeLoop(child as ts.Statement));
+      } else if (
+        ts.isFunctionDeclaration(child) ||
+        ts.isFunctionExpression(child) ||
+        ts.isArrowFunction(child) ||
+        ts.isMethodDeclaration(child)
+      ) {
+        return;
       } else {
         this.findTopLevelLoops(child, loopAnalyzer, results);
       }

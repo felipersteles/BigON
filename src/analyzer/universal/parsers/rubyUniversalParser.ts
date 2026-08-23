@@ -8,7 +8,6 @@ export class RubyUniversalParser {
     let currentFn: {
       name: string;
       startLine: number;
-      parameters: string[];
       bodyLines: { line: number; text: string }[];
     } | null = null;
 
@@ -27,7 +26,6 @@ export class RubyUniversalParser {
         currentFn = {
           name: defMatch[1],
           startLine: lineNum,
-          parameters: defMatch[2] ? defMatch[2].split(',').map((p) => p.trim()) : [],
           bodyLines: [],
         };
         depth = 1;
@@ -67,7 +65,6 @@ export class RubyUniversalParser {
         name: '<script principal>',
         startLine: 1,
         endLine: lines.length,
-        parameters: [],
         bodyText: scriptText,
         loops: mainLoops,
         recursiveCalls: [],
@@ -82,7 +79,6 @@ export class RubyUniversalParser {
     rawFn: {
       name: string;
       startLine: number;
-      parameters: string[];
       bodyLines: { line: number; text: string }[];
     },
     endLine: number
@@ -96,9 +92,10 @@ export class RubyUniversalParser {
     const recursiveCalls: UniversalCallNode[] = [];
     const callRegex = new RegExp(`\\b${rawFn.name}\\s*\\(([^)]*)\\)|\\b${rawFn.name}\\b`, 'g');
     for (const bLine of rawFn.bodyLines) {
+      const code = bLine.text.replace(/(['"]).*?\1/g, '').replace(/#.*$/, '');
       let match;
-      while ((match = callRegex.exec(bLine.text)) !== null) {
-        if (bLine.text.startsWith('def ')) continue;
+      while ((match = callRegex.exec(code)) !== null) {
+        if (code.startsWith('def ')) continue;
         recursiveCalls.push({
           type: 'call',
           name: rawFn.name,
@@ -115,7 +112,6 @@ export class RubyUniversalParser {
       name: rawFn.name,
       startLine: rawFn.startLine,
       endLine,
-      parameters: rawFn.parameters,
       bodyText,
       loops,
       recursiveCalls,
