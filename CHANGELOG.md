@@ -7,6 +7,14 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/spec
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-08-23
+
+### Fixed
+- **Ativação por comandos**: adicionados eventos `onCommand` para garantir que a extensão seja ativada ao executar qualquer comando pelo `.vsix`.
+
+### Changed
+- **Dependências de runtime revisadas**: `typescript` permanece em `dependencies`; ferramentas de teste e declarações de tipos continuam isoladas em `devDependencies`.
+
 ## [1.0.3] - 2026-08-22
 
 ### Added
@@ -62,7 +70,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/spec
 - **Suíte de Testes Unitários**: Testes cobrindo análise estática AST, suporte a múltiplas linguagens e nivelamento de scripts.
 - **Documentação Inicial**: Criação do `README.md` com visão geral, imagens de demonstração, licença MIT e changelog inicial.
 
-[Unreleased]: https://github.com/vncsmnl/BigON/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/vncsmnl/BigON/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/vncsmnl/BigON/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/vncsmnl/BigON/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/vncsmnl/BigON/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/vncsmnl/BigON/compare/v1.0.0...v1.0.1

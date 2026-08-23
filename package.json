@@ -2,7 +2,7 @@
   "name": "BigON",
   "displayName": "BigON",
   "description": "Analisa a complexidade assintótica de código-fonte em tempo real.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "vncsmnl",
   "engines": {
     "vscode": "^1.80.0"
@@ -37,7 +37,10 @@
     "onLanguage:python",
     "onLanguage:ruby",
     "onLanguage:cpp",
-    "onLanguage:c"
+    "onLanguage:c",
+    "onCommand:BigON.analyzeFile",
+    "onCommand:BigON.toggleDecorations",
+    "onCommand:BigON.openExplanation"
   ],
   "main": "./out/extension.js",
   "contributes": {
