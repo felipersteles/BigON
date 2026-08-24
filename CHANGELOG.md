@@ -7,6 +7,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/spec
 
 ## [Unreleased]
 
+### Added
+- **Suporte a Go e Java**: Adicionados parsers universais (`goUniversalParser`, `javaUniversalParser`) para análise heurística de complexidade em arquivos `.go` e `.java`, incluindo detecção de laços lineares/logarítmicos e recursão. Resolve [vncsmnl/BigON#1](https://github.com/vncsmnl/BigON/issues/1).
+
 ## [1.0.2] - 2026-07-22
 
 ### Added

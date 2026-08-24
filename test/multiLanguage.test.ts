@@ -162,4 +162,105 @@ void gerarPermutacoes(std::vector<int>& v) {
       expect(result.functions[0].timeComplexity).toBe('O(n!)');
     });
   });
+
+  describe('Go (.go)', () => {
+    test('deve identificar O(n) em laço for simples em Go', () => {
+      const code = `
+func buscaLinear(arr []int, n int) int {
+    for i := 0; i < n; i++ {
+        if arr[i] == 42 {
+            return i
+        }
+    }
+    return -1
+}
+      `;
+      const result = engine.analyzeCode(code, 'file.go', 'go');
+      expect(result.functions).toHaveLength(1);
+      expect(result.functions[0].functionName).toBe('buscaLinear');
+      expect(result.functions[0].timeComplexity).toBe('O(n)');
+    });
+
+    test('deve identificar O(n^2) em laços aninhados em Go', () => {
+      const code = `
+func bubbleSort(arr []int, n int) {
+    for i := 0; i < n; i++ {
+        for j := 0; j < n; j++ {
+            if arr[i] < arr[j] {
+                arr[i], arr[j] = arr[j], arr[i]
+            }
+        }
+    }
+}
+      `;
+      const result = engine.analyzeCode(code, 'file.go', 'go');
+      expect(result.functions[0].timeComplexity).toBe('O(n^2)');
+    });
+
+    test('deve identificar O(log n) em laço com i *= 2 em Go', () => {
+      const code = `
+func loopLogaritmico(n int) int {
+    cont := 0
+    for i := 1; i < n; i *= 2 {
+        cont++
+    }
+    return cont
+}
+      `;
+      const result = engine.analyzeCode(code, 'file.go', 'go');
+      expect(result.functions[0].timeComplexity).toBe('O(log n)');
+    });
+  });
+
+  describe('Java (.java)', () => {
+    test('deve identificar O(n) em laço for simples em Java', () => {
+      const code = `
+public int buscaLinear(int[] arr, int n) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == 42) {
+            return i;
+        }
+    }
+    return -1;
+}
+      `;
+      const result = engine.analyzeCode(code, 'file.java', 'java');
+      expect(result.functions).toHaveLength(1);
+      expect(result.functions[0].functionName).toBe('buscaLinear');
+      expect(result.functions[0].timeComplexity).toBe('O(n)');
+    });
+
+    test('deve identificar O(n^2) em laços aninhados em Java', () => {
+      const code = `
+public void bubbleSort(int[] arr, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (arr[i] < arr[j]) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+}
+      `;
+      const result = engine.analyzeCode(code, 'file.java', 'java');
+      expect(result.functions[0].timeComplexity).toBe('O(n^2)');
+    });
+
+    test('deve identificar O(log n) em laço while dividindo por constante em Java', () => {
+      const code = `
+public int divisaoSucessiva(int n) {
+    int passos = 0;
+    while (n > 1) {
+        n /= 2;
+        passos++;
+    }
+    return passos;
+}
+      `;
+      const result = engine.analyzeCode(code, 'file.java', 'java');
+      expect(result.functions[0].timeComplexity).toBe('O(log n)');
+    });
+  });
 });

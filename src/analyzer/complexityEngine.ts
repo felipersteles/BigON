@@ -19,7 +19,14 @@ export class ComplexityEngine {
   public analyzeCode(code: string, filePath: string = 'file.ts', languageId: string = 'typescript'): FileAnalysisResult {
     const normLang = normalizeLanguageId(languageId, filePath);
 
-    if (normLang === 'python' || normLang === 'ruby' || normLang === 'cpp' || normLang === 'c') {
+    if (
+      normLang === 'python' ||
+      normLang === 'ruby' ||
+      normLang === 'cpp' ||
+      normLang === 'c' ||
+      normLang === 'go' ||
+      normLang === 'java'
+    ) {
       return this.analyzeUniversalCode(code, filePath, normLang);
     }
 

@@ -37,7 +37,9 @@
     "onLanguage:python",
     "onLanguage:ruby",
     "onLanguage:cpp",
-    "onLanguage:c"
+    "onLanguage:c",
+    "onLanguage:go",
+    "onLanguage:java"
   ],
   "main": "./out/extension.js",
   "contributes": {
