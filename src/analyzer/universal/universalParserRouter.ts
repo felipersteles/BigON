@@ -34,12 +34,16 @@ export class UniversalParserRouter {
   public parse(code: string, languageId: string, fileName: string = ''): UniversalFileAST {
     const normLang = normalizeLanguageId(languageId, fileName);
     const functions = normLang === 'python'
-      ? new PythonUniversalParser().parse(code)
+      ? this.pythonParser.parse(code)
       : normLang === 'ruby'
-        ? new RubyUniversalParser().parse(code)
+        ? this.rubyParser.parse(code)
         : normLang === 'cpp'
-          ? new CppUniversalParser().parse(code)
-          : [];
+          ? this.cppParser.parse(code)
+          : normLang === 'go'
+            ? this.goParser.parse(code)
+            : normLang === 'java'
+              ? this.javaParser.parse(code)
+              : [];
 
     return { functions };
   }
