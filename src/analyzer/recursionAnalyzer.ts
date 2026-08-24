@@ -212,6 +212,14 @@ export class RecursionAnalyzer {
     if (!node) return;
 
     ts.forEachChild(node, (child) => {
+      if (
+        ts.isFunctionDeclaration(child) ||
+        ts.isFunctionExpression(child) ||
+        ts.isArrowFunction(child) ||
+        ts.isMethodDeclaration(child)
+      ) {
+        return;
+      }
       if (ts.isCallExpression(child)) {
         const callerName = child.expression.getText(this.sourceFile);
         if (callerName === functionName || callerName.endsWith(`.${functionName}`)) {

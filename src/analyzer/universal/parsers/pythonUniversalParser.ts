@@ -8,7 +8,6 @@ export class PythonUniversalParser {
     let currentFn: {
       name: string;
       startLine: number;
-      parameters: string[];
       bodyLines: { line: number; text: string; indent: number }[];
       indent: number;
     } | null = null;
@@ -32,7 +31,6 @@ export class PythonUniversalParser {
         currentFn = {
           name: defMatch[1],
           startLine: lineNum,
-          parameters: defMatch[2].split(',').map((p) => p.trim()),
           bodyLines: [],
           indent,
         };
@@ -49,7 +47,6 @@ export class PythonUniversalParser {
             currentFn = {
               name: nextDef[1],
               startLine: lineNum,
-              parameters: nextDef[2].split(',').map((p) => p.trim()),
               bodyLines: [],
               indent,
             };
@@ -85,7 +82,6 @@ export class PythonUniversalParser {
         name: '<script principal>',
         startLine: 1,
         endLine: lines.length,
-        parameters: [],
         bodyText: scriptText,
         loops: mainLoops,
         recursiveCalls: [],
@@ -100,7 +96,6 @@ export class PythonUniversalParser {
     rawFn: {
       name: string;
       startLine: number;
-      parameters: string[];
       bodyLines: { line: number; text: string; indent: number }[];
       indent: number;
     },
@@ -138,7 +133,6 @@ export class PythonUniversalParser {
       name: rawFn.name,
       startLine: rawFn.startLine,
       endLine,
-      parameters: rawFn.parameters,
       bodyText,
       loops,
       recursiveCalls,

@@ -27,7 +27,6 @@ export class CppUniversalParser {
     let currentFn: {
       name: string;
       startLine: number;
-      parameters: string[];
       bodyLines: { line: number; text: string }[];
     } | null = null;
 
@@ -63,7 +62,6 @@ export class CppUniversalParser {
             currentFn = {
               name,
               startLine: lineNum,
-              parameters: match[2] ? match[2].split(',').map((p) => p.trim()) : [],
               bodyLines: [],
             };
             fnBraceDepth = (trimmed.match(/\{/g) || []).length - (trimmed.match(/\}/g) || []).length;
@@ -103,7 +101,6 @@ export class CppUniversalParser {
         name: '<script principal>',
         startLine: 1,
         endLine: lines.length,
-        parameters: [],
         bodyText: scriptText,
         loops: mainLoops,
         recursiveCalls: [],
@@ -118,7 +115,6 @@ export class CppUniversalParser {
     rawFn: {
       name: string;
       startLine: number;
-      parameters: string[];
       bodyLines: { line: number; text: string }[];
     },
     endLine: number
@@ -151,7 +147,6 @@ export class CppUniversalParser {
       name: rawFn.name,
       startLine: rawFn.startLine,
       endLine,
-      parameters: rawFn.parameters,
       bodyText,
       loops,
       recursiveCalls,

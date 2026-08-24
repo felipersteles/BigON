@@ -79,7 +79,7 @@ Para linguagens que não utilizam o compilador TypeScript nativo, o BigON utiliz
 - **`UniversalFunctionNode`**: Representa uma função contendo intervalos de linhas (`startLine`, `endLine`), lista de laços aninhados, chamadas recursivas, alocações de memória e flags de divisão.
 - **`PythonUniversalParser`**: Analisa a indentação característica do Python, laços `for x in range(...)`, `while`, e chamadas recursivas.
 - **`RubyUniversalParser`**: Analisa blocos `def...end`, `.each`, `times`, `while`.
-- **`CppUniversalParser`**: Analisa laços `for (int i = 0; i < n; i++)`, `while`, ponteiros e vetores `std::vector`.
+- **`CppUniversalParser`**: Analisa C e C++ por meio de padrões textuais para laços `for`, `while`, ponteiros e vetores `std::vector`.
 
 ---
 

@@ -118,6 +118,12 @@ export class LoopAnalyzer {
           explanation: `Laço com limite quadrático (${condText}) → O(sqrt n)`,
         };
       }
+      if (/\b[A-Za-z_$][\w$]*\s*\(/.test(condText)) {
+        return {
+          complexity: 'O(desconhecido)',
+          explanation: `Limite do laço depende de chamada (${condText}); complexidade não determinável`,
+        };
+      }
     }
 
     return {
@@ -212,6 +218,7 @@ export class LoopAnalyzer {
 }
 
 export function multiplyBigO(a: BigOComplexity, b: BigOComplexity): BigOComplexity {
+  if (a === 'O(desconhecido)' || b === 'O(desconhecido)') return 'O(desconhecido)';
   if (a === 'O(1)') return b;
   if (b === 'O(1)') return a;
 
@@ -239,7 +246,7 @@ export function maxBigO(a: BigOComplexity, b: BigOComplexity): BigOComplexity {
     'O(n^4)': 8,
     'O(2^n)': 9,
     'O(n!)': 10,
-    'O(desconhecido)': 0,
+    'O(desconhecido)': 11,
   };
 
   return rank[a] >= rank[b] ? a : b;

@@ -1,4 +1,4 @@
-import { UniversalFileAST, UniversalFunctionNode } from './types';
+import { UniversalFileAST } from './types';
 import { PythonUniversalParser } from './parsers/pythonUniversalParser';
 import { RubyUniversalParser } from './parsers/rubyUniversalParser';
 import { CppUniversalParser } from './parsers/cppUniversalParser';
@@ -32,24 +32,15 @@ export class UniversalParserRouter {
   private javaParser = new JavaUniversalParser();
 
   public parse(code: string, languageId: string, fileName: string = ''): UniversalFileAST {
-    let functions: UniversalFunctionNode[] = [];
     const normLang = normalizeLanguageId(languageId, fileName);
+    const functions = normLang === 'python'
+      ? new PythonUniversalParser().parse(code)
+      : normLang === 'ruby'
+        ? new RubyUniversalParser().parse(code)
+        : normLang === 'cpp'
+          ? new CppUniversalParser().parse(code)
+          : [];
 
-    if (normLang === 'python') {
-      functions = this.pythonParser.parse(code);
-    } else if (normLang === 'ruby') {
-      functions = this.rubyParser.parse(code);
-    } else if (normLang === 'cpp') {
-      functions = this.cppParser.parse(code);
-    } else if (normLang === 'go') {
-      functions = this.goParser.parse(code);
-    } else if (normLang === 'java') {
-      functions = this.javaParser.parse(code);
-    }
-
-    return {
-      languageId: normLang,
-      functions,
-    };
+    return { functions };
   }
 }
